@@ -23,6 +23,7 @@ goto ${custom_choice}
 goto custom_exit
 
 :ubuntu
+imgfree  # Discard any already-downloaded images
 # Figure out if client is 64-bit capable
 cpuid --ext 29 && set arch amd64 || set arch i386
 set ubuntu-mirror http://archive.ubuntu.com
@@ -34,6 +35,7 @@ initrd ${ubuntu-url}/initrd.gz
 boot || custom_exit
 
 :w10
+imgfree  # Discard any already-downloaded images
 kernel ${server-url}/wimboot.x86_64
 initrd ${server-url}/iso/w10/bootmgr bootmgr
 initrd ${server-url}/iso/w10/boot/bcd bcd
@@ -42,6 +44,7 @@ initrd ${server-url}/iso/w10/sources/boot.wim boot.wim
 boot || goto custom_exit
 
 :w7
+imgfree  # Discard any already-downloaded images
 kernel ${server-url}/wimboot.x86_64
 initrd ${server-url}/iso/w7/bootmgr bootmgr
 initrd ${server-url}/iso/w7/boot/bcd bcd
@@ -75,5 +78,6 @@ boot || goto custom_exit
 #boot || goto custom_exit
 
 :custom_exit
+imgfree  # Discard any already-downloaded images
 chain utils.ipxe
 exit 0
