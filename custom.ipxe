@@ -14,6 +14,7 @@ item ubuntu ${space} Ubuntu ...
 item --gap Windows
 item w10 ${space} Microsoft Windows 10 ...
 item w7 ${space} Microsoft Windows 7 ...
+item wpe ${space} Microsoft Windows PE Home Build ...
 #item iso-w10 ${space} Microsoft Windows 10 ISO ...
 #item iso-wxp ${space} Microsoft Windows XP ISO ...
 #item w2k ${space} Loading Windows 2000 ...
@@ -52,6 +53,15 @@ initrd ${server-url}/iso/w7/bootmgr bootmgr
 initrd ${server-url}/iso/w7/boot/bcd bcd
 initrd ${server-url}/iso/w7/boot/boot.sdi boot.sdi
 initrd ${server-url}/iso/w7/sources/boot.wim boot.wim
+boot || goto custom_exit
+
+:wpe
+imgfree  # Discard any already-downloaded images
+kernel ${server-url}/wimboot.x86_64
+initrd ${server-url}/iso/wpe/bootmgr bootmgr
+initrd ${server-url}/iso/wpe/Boot/BCD BCD
+initrd ${server-url}/iso/wpe/Boot/boot.sdi boot.sdi
+initrd ${server-url}/iso/wpe/sources/boot.wim boot.wim
 boot || goto custom_exit
 
 #:w2k
