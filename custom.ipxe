@@ -17,6 +17,8 @@ item w7 ${space} Microsoft Windows 7 ...
 #item iso-w10 ${space} Microsoft Windows 10 ISO ...
 #item iso-wxp ${space} Microsoft Windows XP ISO ...
 #item w2k ${space} Loading Windows 2000 ...
+item --gap Other stuff
+item hirens ${space} Hirens Boot CD ...
 choose custom_choice || goto custom_exit
 echo ${cls}
 goto ${custom_choice}
@@ -76,6 +78,11 @@ boot || goto custom_exit
 #kernel ${server-url}/memdisk raw iso
 #initrd ${server-url}/iso/WindowsXPProfessionalSP3x86.iso
 #boot || goto custom_exit
+
+:hirens
+kernel ${server-url}/memdisk raw iso
+initrd ${server-url}/iso/HBCD_PE_x64.iso
+boot || goto custom_exit
 
 :custom_exit
 imgfree  # Discard any already-downloaded images
