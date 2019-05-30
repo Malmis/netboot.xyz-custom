@@ -1,12 +1,76 @@
 #!ipxe
 ###
-### netboot.xyz-custom menu
+### Malmis netboot.xyz-custom menu
 ###
+isset ${server-url} || set server-url http://192.168.1.64:8383
 
-:start
-echo Hello world!
-sleep 10
+:custom
+clear custom_choice
+menu Malmis Custom Menu
+item --gap Linux
+item ubuntu ${space} Loading Ubuntu ...
+item iso-ubuntu-x86 ${space} Load Ubuntu x86 ISO ...
+item iso-ubuntu-x64 ${space} Load Ubuntu x64 ISO ...
+item --gap Windows
+item w10 ${space} Loading Windows 10 ...
+item iso-w10 ${space} Load Microsoft Windows 10 ISO ...
+item iso-wxp ${space} Load Microsoft Windows XP ISO ...
+#item w2k ${space} Loading Windows 2000 ...
+item --gap Custom choice menu
+item anothercustom ${space} Loading another custom menu ...
+choose custom_choice || goto custom_exit
+echo ${cls}
+goto ${custom_choice}
 goto custom_exit
 
+:ubuntu
+# Figure out if client is 64-bit capable
+cpuid --ext 29 && set arch x64 || set arch x86
+set ubuntu-mirror http://archive.ubuntu.com
+set ubuntu-release disco
+set ubuntu--url ${ubuntu-mirror}/ubuntu/dists/${ubuntu-release}/main/installer-${arch}/current/images/netboot/ubuntu-installer/${arch}
+kernel ${ubuntu-url}/linux
+initrd ${ubuntu-url}/initrd.gz
+#imgargs preseed/url=http://${server-ip}:8383/ubuntu/ubuntu.preseed auto=true
+boot || custom_exit
+
+:w10
+kernel ${server-url}/wimboot
+initrd ${server-url}/iso/w10/bootmgr bootmgr
+initrd ${server-url}/iso/w10/boot/bcd bcd
+initrd ${server-url}/iso/w10/boot/boot.sdi boot.sdi
+initrd ${server-url}/iso/w10/sources/boot.wim boot.wim
+boot || goto custom_exit
+
+#:w2k
+#kernel 
+#initrd 
+#boot || goto custom_exit
+
+:iso-ubuntu-x86
+kernel ${server-url}/memdisk raw iso
+initrd ${server-url}/iso/ubuntu-16.04.6-desktop-i386.iso
+boot || goto custom_exit
+
+:iso-ubuntu-x64
+kernel ${server-url}/memdisk raw iso
+initrd ${server-url}/iso/ubuntu-19.04-desktop-amd64.iso
+boot || goto custom_exit
+
+:iso-w10
+kernel ${server-url}/memdisk raw iso
+initrd ${server-url}/iso/Win10_1809Oct_v2_Swedish_x64.iso
+boot || goto custom_exit
+
+:iso-wxp
+kernel ${server-url}/memdisk raw iso
+initrd ${server-url}/iso/WindowsXPProfessionalSP3x86.iso
+boot || goto custom_exit
+
+:anothercustom
+echo Chains into another menu...
+chain https://raw.githubusercontent.com/${github_user}/netboot.xyz-custom/master/custom1.ipxe || goto custom
+
 :custom_exit
+chain utils.ipxe
 exit 0
