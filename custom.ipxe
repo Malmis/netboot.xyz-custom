@@ -8,13 +8,14 @@ isset ${server-url} || set server-url http://192.168.1.70:8383
 clear custom_choice
 menu Malmis Custom Menu
 item --gap Linux
-item ubuntu ${space} Loading Ubuntu ...
-item iso-ubuntu-x86 ${space} Load Ubuntu x86 ISO ...
-item iso-ubuntu-x64 ${space} Load Ubuntu x64 ISO ...
+item ubuntu ${space} Ubuntu ...
+#item iso-ubuntu-x86 ${space} Ubuntu x86 ISO ...
+#item iso-ubuntu-x64 ${space} Ubuntu x64 ISO ...
 item --gap Windows
-item w10 ${space} Loading Windows 10 ...
-item iso-w10 ${space} Load Microsoft Windows 10 ISO ...
-item iso-wxp ${space} Load Microsoft Windows XP ISO ...
+item w10 ${space} Microsoft Windows 10 ...
+item w7 ${space} Microsoft Windows 7 ...
+#item iso-w10 ${space} Microsoft Windows 10 ISO ...
+#item iso-wxp ${space} Microsoft Windows XP ISO ...
 #item w2k ${space} Loading Windows 2000 ...
 choose custom_choice || goto custom_exit
 echo ${cls}
@@ -23,7 +24,7 @@ goto custom_exit
 
 :ubuntu
 # Figure out if client is 64-bit capable
-cpuid --ext 29 && set arch x64 || set arch x86
+cpuid --ext 29 && set arch amd64 || set arch i386
 set ubuntu-mirror http://archive.ubuntu.com
 set ubuntu-release disco
 set ubuntu-url ${ubuntu-mirror}/ubuntu/dists/${ubuntu-release}/main/installer-${arch}/current/images/netboot/ubuntu-installer/${arch}
@@ -33,11 +34,19 @@ initrd ${ubuntu-url}/initrd.gz
 boot || custom_exit
 
 :w10
-kernel ${server-url}/wimboot
+kernel ${server-url}/wimboot.x86_64
 initrd ${server-url}/iso/w10/bootmgr bootmgr
 initrd ${server-url}/iso/w10/boot/bcd bcd
 initrd ${server-url}/iso/w10/boot/boot.sdi boot.sdi
 initrd ${server-url}/iso/w10/sources/boot.wim boot.wim
+boot || goto custom_exit
+
+:w7
+kernel ${server-url}/wimboot.x86_64
+initrd ${server-url}/iso/w7/bootmgr bootmgr
+initrd ${server-url}/iso/w7/boot/bcd bcd
+initrd ${server-url}/iso/w7/boot/boot.sdi boot.sdi
+initrd ${server-url}/iso/w7/sources/boot.wim boot.wim
 boot || goto custom_exit
 
 #:w2k
@@ -45,25 +54,25 @@ boot || goto custom_exit
 #initrd 
 #boot || goto custom_exit
 
-:iso-ubuntu-x86
-kernel ${server-url}/memdisk raw iso
-initrd ${server-url}/iso/ubuntu-16.04.6-desktop-i386.iso
-boot || goto custom_exit
+#:iso-ubuntu-x86
+#kernel ${server-url}/memdisk raw iso
+#initrd ${server-url}/iso/ubuntu-16.04.6-desktop-i386.iso
+#boot || goto custom_exit
 
-:iso-ubuntu-x64
-kernel ${server-url}/memdisk raw iso
-initrd ${server-url}/iso/ubuntu-19.04-desktop-amd64.iso
-boot || goto custom_exit
+#:iso-ubuntu-x64
+#kernel ${server-url}/memdisk raw iso
+#initrd ${server-url}/iso/ubuntu-19.04-desktop-amd64.iso
+#boot || goto custom_exit
 
-:iso-w10
-kernel ${server-url}/memdisk raw iso
-initrd ${server-url}/iso/Win10_1809Oct_v2_Swedish_x64.iso
-boot || goto custom_exit
+#:iso-w10
+#kernel ${server-url}/memdisk raw iso
+#initrd ${server-url}/iso/Win10_1809Oct_v2_Swedish_x64.iso
+#boot || goto custom_exit
 
-:iso-wxp
-kernel ${server-url}/memdisk raw iso
-initrd ${server-url}/iso/WindowsXPProfessionalSP3x86.iso
-boot || goto custom_exit
+#:iso-wxp
+#kernel ${server-url}/memdisk raw iso
+#initrd ${server-url}/iso/WindowsXPProfessionalSP3x86.iso
+#boot || goto custom_exit
 
 :custom_exit
 chain utils.ipxe
