@@ -71,27 +71,27 @@ boot || goto custom_exit
 
 :iso-ubuntu-x86
 imgfree
-sanboot --no-describe ${server-url}/iso/ubuntu-16.04.6-desktop-i386.iso
+sanboot ${server-url}/iso/ubuntu-16.04.6-desktop-i386.iso
 boot || goto custom_exit
 
 :iso-ubuntu-x64
 imgfree
-sanboot --no-describe ${server-url}/iso/ubuntu-19.04-desktop-amd64.iso
+sanboot ${server-url}/iso/ubuntu-19.04-desktop-amd64.iso
 boot || goto custom_exit
 
 :iso-w10
 imgfree
-sanboot --no-describe ${server-url}/iso/Win10_1809Oct_v2_Swedish_x64.iso
+sanboot ${server-url}/iso/Win10_1809Oct_v2_Swedish_x64.iso
 boot || goto custom_exit
 
 :iso-wxp
 imgfree
-sanboot --no-describe ${server-url}/iso/WindowsXPProfessionalSP3x86.iso
+sanboot ${server-url}/iso/WindowsXPProfessionalSP3x86.iso
 boot || goto custom_exit
 
 :hirens
 imgfree
-sanboot --no-describe ${server-url}/iso/HBCD_PE_x64.iso
+sanboot ${server-url}/iso/HBCD_PE_x64.iso
 boot || goto custom_exit
 
 :custom_exit
