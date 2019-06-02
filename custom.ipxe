@@ -9,14 +9,14 @@ clear custom_choice
 menu Malmis Custom Menu
 item --gap Linux
 item ubuntu ${space} Ubuntu ...
-#item iso-ubuntu-x86 ${space} Ubuntu x86 ISO ...
-#item iso-ubuntu-x64 ${space} Ubuntu x64 ISO ...
+item iso-ubuntu-x86 ${space} Ubuntu x86 ISO ...
+item iso-ubuntu-x64 ${space} Ubuntu x64 ISO ...
 item --gap Windows
 item w10 ${space} Microsoft Windows 10 ...
 item w7 ${space} Microsoft Windows 7 ...
 item wpe ${space} Microsoft Windows PE Home Build ...
-#item iso-w10 ${space} Microsoft Windows 10 ISO ...
-#item iso-wxp ${space} Microsoft Windows XP ISO ...
+item iso-w10 ${space} Microsoft Windows 10 ISO ...
+item iso-wxp ${space} Microsoft Windows XP ISO ...
 #item w2k ${space} Loading Windows 2000 ...
 item --gap Other stuff
 item hirens ${space} Hirens Boot CD ...
@@ -69,29 +69,29 @@ boot || goto custom_exit
 #initrd 
 #boot || goto custom_exit
 
-#:iso-ubuntu-x86
-#kernel ${server-url}/memdisk raw iso
-#initrd ${server-url}/iso/ubuntu-16.04.6-desktop-i386.iso
-#boot || goto custom_exit
+:iso-ubuntu-x86
+imgfree
+sanboot --no-describe ${server-url}/iso/ubuntu-16.04.6-desktop-i386.iso
+boot || goto custom_exit
 
-#:iso-ubuntu-x64
-#kernel ${server-url}/memdisk raw iso
-#initrd ${server-url}/iso/ubuntu-19.04-desktop-amd64.iso
-#boot || goto custom_exit
+:iso-ubuntu-x64
+imgfree
+sanboot --no-describe ${server-url}/iso/ubuntu-19.04-desktop-amd64.iso
+boot || goto custom_exit
 
-#:iso-w10
-#kernel ${server-url}/memdisk raw iso
-#initrd ${server-url}/iso/Win10_1809Oct_v2_Swedish_x64.iso
-#boot || goto custom_exit
+:iso-w10
+imgfree
+sanboot --no-describe ${server-url}/iso/Win10_1809Oct_v2_Swedish_x64.iso
+boot || goto custom_exit
 
-#:iso-wxp
-#kernel ${server-url}/memdisk raw iso
-#initrd ${server-url}/iso/WindowsXPProfessionalSP3x86.iso
-#boot || goto custom_exit
+:iso-wxp
+imgfree
+sanboot --no-describe ${server-url}/iso/WindowsXPProfessionalSP3x86.iso
+boot || goto custom_exit
 
 :hirens
-kernel ${server-url}/memdisk raw iso
-initrd ${server-url}/iso/HBCD_PE_x64.iso
+imgfree
+sanboot --no-describe ${server-url}/iso/HBCD_PE_x64.iso
 boot || goto custom_exit
 
 :custom_exit
